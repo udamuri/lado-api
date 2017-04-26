@@ -11,7 +11,9 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'modules' => [
-
+        'post' => [
+            'class' => 'app\modules\post\module',
+        ],
     ],
     'components' => [
         'request' => [
