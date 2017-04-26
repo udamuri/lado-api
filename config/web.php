@@ -17,6 +17,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'baseUrl' => $baseUrl,
+            'enableCsrfValidation'=>false,
             'cookieValidationKey' => '~m@uribudimanskommkom',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
