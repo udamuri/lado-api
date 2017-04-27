@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use app\models\Example;
 use yii\helpers\Json;
+use yii\helpers\Html;
 
 /****************************************************
 body post
@@ -46,19 +47,19 @@ class ExampleForm extends Model
                     if(count($valid) == 0 )
                     {
                         $create = new Example();
-                        $create->name = $value['name'];
-                        $create->email = $value['email'];
+                        $create->name = Html::encode($value['name']);
+                        $create->email = Html::encode($value['email']);
                         if( isset($value['blog']) )
                         {
-                            $create->blog = $value['blog'];
+                            $create->blog = Html::encode($value['blog']);
                         }
                         if( isset($value['company']) )
                         {
-                            $create->company = $value['company'];
+                            $create->company = Html::encode($value['company']);
                         }
                         if( isset($value['bio']) )
                         {
-                             $create->bio = $value['bio'];   
+                             $create->bio = Html::encode($value['bio']);   
                         }
                         if($create->save(false))
                         {
