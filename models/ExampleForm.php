@@ -3,74 +3,133 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-use app\models\Employee;
+use app\models\Example;
 use yii\helpers\Json;
 
-/**
- * This is the model class for table "employee".
- *
- * @property integer $id
- * @property string $name
- * @property string $email
- * @property string $birthday
- * @property string $photo
- * @property integer $created_at
- * @property integer $updated_at
- */
-
+/****************************************************
+body post
+*****************************************************
+*[
+*    {
+*        "name" : "Muri Budiman",
+*        "email" : "udamuri@gmail.com",
+*        "blog" : "muribudiman.wordpress.com",
+*        "company" : "Mindo",
+*        "bio" : "Lorem Ipsum Dolor SIt Amet"
+*    },
+*    {
+*        "name" : "Heru Budiman",
+*        "email" : "udaheru@gmail.com",
+*        "blog" : "herubudiman.wordpress.com",
+*        "company" : "Mindo",
+*        "bio" : "Lorem Ipsum Dolor SIt Amet"
+*    }
+*]
+****************************************************/
 class ExampleForm extends Model
 {
-	
-    public $id;
-    public $name;
-    public $email;
-    public $photo;
-    public $supplier_phone2;
-    public $supplier_status;
-    public $created_at;
-    public $updated_at;
- 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
 
-            ['name', 'required'],
-            ['name', 'filter', 'filter' => 'trim'],
-            ['name', 'string', 'max' => 150],
+    /******************************
+    * Example Create to table example
+    ******************************/
+    public function create($json="")
+    {
+        $arrMessage = [];
+        $error = true;
+        if(is_array($json))
+        {
+            $arrErr = [];
+            foreach ($json as $key => $value) {
+                if(isset($value['name']) && isset($value['email']) )
+                {
+                    $valid = $this->EmailValid($value['email']);
+                    if(count($valid) == 0 )
+                    {
+                        $create = new Example();
+                        $create->name = $value['name'];
+                        $create->email = $value['email'];
+                        if( isset($value['blog']) )
+                        {
+                            $create->blog = $value['blog'];
+                        }
+                        if( isset($value['company']) )
+                        {
+                            $create->company = $value['company'];
+                        }
+                        if( isset($value['bio']) )
+                        {
+                             $create->bio = $value['bio'];   
+                        }
+                        if($create->save(false))
+                        {
+                            $error = false;
+                            $arrErr[] = [
+                                'id' => $create->id,
+                                'message' => 'success'
+                            ];
+                        }
+                        else
+                        {
+                            $error = true;
+                            $arrErr[] = [
+                                'id' => $key,
+                                'message' => 'unsuccessful'
+                            ];  
+                        }
+                    }
+                    else
+                    {
+                        $error = true;
+                        $arrErr[] = [
+                            'id' => $key,
+                            'message' => 'Duplicate entry '.$value['email'].' for key \'email'
+                        ];    
+                    }
+                }
+                else
+                {
+                    $error = true;
+                    $arrErr[] = [
+                        'id' => $key,
+                        'message' => 'name OR email not defined'
+                    ];   
+                }
+            }
+
+            $arrMessage = [
+                'error' => $error,
+                'message' => $arrErr,
+            ];
+
+            return $arrMessage;
+        }
+
+        $arrMessage = [
+            'error' => $error,
+            'message' => 'The data read from a file wasn\'t in the expected format.',
         ];
+
+        return $arrMessage;
     }
 
-    public function create()
-    {
-        return null;
-    }
-
+    /******************************
+    * Example Get data from table example
+    ******************************/
     public function getExample()
     {
         $rows = (new \yii\db\Query())
-            ->select(['id', 'name', 'email', 'birthday', 'photo'])
-            ->from('employee')
+            ->select(['id', 'name', 'email', 'blog', 'company', 'bio'])
+            ->from('example')
             //->where(['last_name' => 'Smith'])
             ->limit(10)
             ->all();
+
         $arrData = [
             'status'=>'true',
+            'count' => count($rows),
             'data' => $rows
         ];
         return $arrData;
-    }
-
-    /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
-     */
-    public function update($id)
-    {
-        return null;
     }
 	
     public function delete($id)
@@ -85,4 +144,9 @@ class ExampleForm extends Model
         return null;  
     }
 	
+    private function EmailValid($email = "")
+    {
+        $model = Example::find()->where(['email'=>$email])->one();
+        return $model;
+    }
 }

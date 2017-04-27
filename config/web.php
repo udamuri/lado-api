@@ -33,7 +33,8 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
+
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -51,6 +52,7 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    //'logFile' => '@api/runtime/logs/error.log'
                 ],
             ],
         ],

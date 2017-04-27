@@ -14,7 +14,6 @@ use yii\web\Request;
 use yii\web\Response;
 use yii\helpers\Json;
 use app\models\User;
-use app\models\Employee;
 use app\models\ExampleForm;
 
 
@@ -73,14 +72,9 @@ class ExampleController extends Controller
         \Yii::$app->response->format = Response::FORMAT_JSON;
         $headers = Yii::$app->response->headers;
         $post = Yii::$app->request->post();
-        return $post;
+        $model = new ExampleForm();
+        $create = $model->create($post);
+        return $create;
     }
 
-    public function actionError()
-    {
-        $exception = Yii::$app->errorHandler->exception;
-        if ($exception !== null) {
-            return Json::encode(['exception' => $exception]);
-        }
-    }
 }
