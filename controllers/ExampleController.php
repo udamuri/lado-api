@@ -70,11 +70,15 @@ class ExampleController extends Controller
     public function actionCreate()
     {
         \Yii::$app->response->format = Response::FORMAT_JSON;
-        $headers = Yii::$app->response->headers;
-        $post = Yii::$app->request->post();
-        $model = new ExampleForm();
-        $create = $model->create($post);
-        return $create;
+        if(Yii::$app->request->getIsPost())
+        {
+          $post = Yii::$app->request->post();
+          $model = new ExampleForm();
+          $create = $model->create($post);
+          return $create;
+        }
+
+        return null;
     }
 
 }
