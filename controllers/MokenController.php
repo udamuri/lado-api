@@ -6,10 +6,8 @@ use yii;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\filters\ContentNegotiator;
-//use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;
-//use yii\filters\auth\HttpBearerAuth;
-//use yii\filters\auth\QueryParamAuth;
+use yii\filters\auth\QueryParamAuth;
+use yii\filters\Cors;
 use yii\web\Request;
 use yii\web\Response;
 use yii\helpers\Json;
@@ -17,24 +15,18 @@ use app\models\User;
 use app\models\ExampleForm;
 
 
-class ExampleController extends Controller
+class MokenController extends Controller
 {
    	public function behaviors(){
-      return [
-          'basicAuth' => [
-              'class' => \yii\filters\auth\HttpBasicAuth::className(),
-              'auth' => function ($username, $password) {
-                  $user = User::find()->where(['username' => $username])->one();
-                  if ($user) {
-                      if($user->validatePassword($password))
-                      {
-                        return $user;
-                      }
-                  }
-                  return null;
-              },
-          ],
+      $behaviors = parent::behaviors();
+      $behaviors['corsFilter'] = [
+          'class' => Cors::className(),
+          'cors' => [
+            'Origin' => ['*'],
+        ],
       ];
+
+      return $behaviors;
     }
 
     protected function verbs()

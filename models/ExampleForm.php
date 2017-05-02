@@ -30,6 +30,29 @@ body post
 class ExampleForm extends Model
 {
 
+    public function rules()
+    {
+        return [
+            ['name', 'required'],
+            ['name', 'filter', 'filter' => 'trim'],
+            ['name', 'string', 'max' => 100],
+
+            ['email', 'required'],
+            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'email'],
+
+            ['blog', 'filter', 'filter' => 'trim'],
+            ['blog', 'string', 'max' => 100],
+
+            ['company', 'filter', 'filter' => 'trim'],
+            ['company', 'string', 'max' => 100],
+
+            ['bio', 'filter', 'filter' => 'trim'],
+            ['bio', 'string', 'max' => 255],
+        ];
+    }
+
+
     /******************************
     * Example Create to table example
     ******************************/
