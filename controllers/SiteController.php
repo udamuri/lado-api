@@ -37,5 +37,10 @@ class SiteController extends Controller
     {
         return 'lado API';
     }
+
+    public function actionError()
+    {
+        
+    }
     
 }

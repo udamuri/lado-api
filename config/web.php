@@ -6,8 +6,8 @@ use \yii\web\Request;
 $baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
 
 $config = [
-    'id' => 'extranet',
-    'name' => 'Extranet',
+    'id' => 'gosef',
+    'name' => 'gosef',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'modules' => [
@@ -17,7 +17,6 @@ $config = [
     ],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'baseUrl' => $baseUrl,
             'enableCsrfValidation'=>false,
             'cookieValidationKey' => '~m@uribudimanskommkom',
@@ -25,9 +24,6 @@ $config = [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
-        // 'parsers' => [
-        //     'application/json' => 'yii\web\JsonParser',
-        //  ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
